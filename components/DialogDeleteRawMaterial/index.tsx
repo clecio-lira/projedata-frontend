@@ -20,25 +20,23 @@ import { DeleteRawMaterial } from "@/services/RawMaterial";
 interface DialogDeleteRawMaterialProps {
   id: number;
   name: string;
-  onDeleted: () => void;
+  setMaterials: React.Dispatch<React.SetStateAction<IRawMaterialResponse[]>>;
 }
 
 export default function DialogDeleteRawMaterial({
   id,
   name,
-  onDeleted,
+  setMaterials,
 }: DialogDeleteRawMaterialProps) {
   const handleDelete = async (materialId: number) => {
     try {
       await DeleteRawMaterial(materialId);
 
+      setMaterials((prev) => prev.filter((p) => p.id !== materialId));
+
       toast.success("Matéria-prima excluída com sucesso!");
-      onDeleted();
-    } catch (error: any) {
-      console.error(error);
-      const errorMessage =
-        error.response?.data?.message || "Erro ao excluir matéria-prima";
-      toast.error(errorMessage);
+    } catch (error) {
+      toast.error("Erro ao excluir matéria-prima");
     }
   };
 
@@ -54,12 +52,10 @@ export default function DialogDeleteRawMaterial({
         <AlertDialogHeader>
           <AlertDialogTitle>Excluir Matéria-Prima</AlertDialogTitle>
           <AlertDialogDescription className="font-josefin">
-            Tem certeza de que deseja excluir o insumo{" "}
-            <strong className="text-red-600 font-bold">{name}</strong>?
-            <br />
-            <br />
-            Esta ação não pode ser desfeita e pode afetar produtos que dependem
-            deste material.
+            Tem certeza de que deseja excluir a matéria-prima{" "}
+            <strong className="text-red-600 font-bold">{name}</strong>? Esta
+            ação não pode ser desfeita e pode afetar produtos que dependem deste
+            material.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -67,7 +63,7 @@ export default function DialogDeleteRawMaterial({
             Cancelar
           </AlertDialogCancel>
           <AlertDialogAction
-            className="cursor-pointer bg-red-600 text-white hover:bg-red-700 font-semibold"
+            className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
             onClick={() => handleDelete(id)}
           >
             Confirmar Exclusão

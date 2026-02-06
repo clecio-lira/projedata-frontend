@@ -169,7 +169,7 @@ export default function RawMaterials() {
                           <DialogDeleteRawMaterial
                             id={item.id}
                             name={item.name}
-                            onDeleted={fetchMaterials}
+                            setMaterials={setMaterials}
                           />
                         </div>
                       </TableCell>
