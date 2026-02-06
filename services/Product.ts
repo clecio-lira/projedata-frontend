@@ -1,6 +1,5 @@
 import { IProductRequest, IProductRequestUpdate } from "@/interfaces/Product";
 import { apiRequest } from "@/utils/api";
-import { toast } from "sonner";
 
 export async function InsertProduct(obj: IProductRequest) {
   try {
@@ -14,7 +13,7 @@ export async function InsertProduct(obj: IProductRequest) {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao criar o produto.");
+    throw error;
   }
 }
 
@@ -26,7 +25,7 @@ export async function FindAllProducts() {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao buscar os produtos.");
+    throw error;
   }
 }
 
@@ -38,7 +37,7 @@ export async function FindByIdProduct(id: number) {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao buscar o produto.");
+    throw error;
   }
 }
 
@@ -54,7 +53,7 @@ export async function UpdateProduct(id: number, obj: IProductRequestUpdate) {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao atualizar o produto.");
+    throw error;
   }
 }
 
@@ -64,6 +63,6 @@ export async function DeleteProduct(id: number) {
       method: "DELETE",
     });
   } catch (error) {
-    toast.error("Erro ao remover produto.");
+    throw error;
   }
 }

@@ -1,5 +1,4 @@
 import { apiRequest } from "@/utils/api";
-import { toast } from "sonner";
 
 export async function GetSuggestions() {
   try {
@@ -9,6 +8,6 @@ export async function GetSuggestions() {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao buscar as sugestões.");
+    throw error;
   }
 }

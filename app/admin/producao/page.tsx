@@ -118,8 +118,19 @@ export default function ProductionReport() {
           <AlertDescription>
             {data.notProduced.map((item, idx) => (
               <p key={idx}>
-                • <strong>{item.productName}</strong>: matéria-prima
-                insuficiente: {item.reason.split(":")[1].trim()}
+                • <strong>{item.productName}</strong>:{" "}
+                {item.reason.includes(":") ? (
+                  <>
+                    matéria-prima insuficiente:{" "}
+                    <span className="font-medium text-amber-600">
+                      {item.reason.split(":")[1]?.trim()}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-red-500 italic">
+                    Este produto não possui matérias-primas vinculadas.
+                  </span>
+                )}
               </p>
             ))}
           </AlertDescription>

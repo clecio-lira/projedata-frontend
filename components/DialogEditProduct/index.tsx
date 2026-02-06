@@ -74,6 +74,10 @@ export default function DialogEditProduct({
       toast.success("Produto atualizado com sucesso");
       onUpdated();
     } catch (error) {
+      if (error instanceof Error && error.message.includes("409")) {
+        toast.error("Já existe um produto com este código");
+        return;
+      }
       toast.error("Erro ao atualizar o produto");
     }
   };

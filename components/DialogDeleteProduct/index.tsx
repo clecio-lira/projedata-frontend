@@ -36,7 +36,6 @@ export default function DialogDeleteProduct({
 
       toast.success("Produto excluído com sucesso!");
     } catch (error) {
-      console.error(error);
       toast.error("Erro ao excluir produto");
     }
   };

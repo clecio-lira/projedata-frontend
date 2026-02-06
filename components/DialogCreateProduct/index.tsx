@@ -118,7 +118,11 @@ export default function DialogCreateProduct({
       toast.success("Produto criado com sucesso");
       onCreated();
     } catch (error) {
-      toast.error("Erro ao criar produto");
+      if (error instanceof Error && error.message.includes("409")) {
+        toast.error("Já existe um produto com este código");
+        return;
+      }
+      toast.error("Erro ao criar o produto");
     }
   };
 

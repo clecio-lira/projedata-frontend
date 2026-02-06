@@ -16,7 +16,7 @@ export default function AdminLayout({
   const navigation = [
     { name: "Produção", href: "/admin/producao", icon: LightbulbIcon },
     { name: "Produtos", href: "/admin/produtos", icon: PackageIcon },
-    { name: "Materia Prima", href: "/admin/materia-prima", icon: BoxesIcon },
+    { name: "Matéria-Prima", href: "/admin/materia-prima", icon: BoxesIcon },
   ];
 
   return (
