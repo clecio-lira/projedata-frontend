@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, Plus, Trash2 } from "lucide-react";
+import { Edit, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -14,10 +14,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import {
-  IProductRawMaterialRequest,
-  IProductRequest,
-} from "@/interfaces/Product";
+import { IProductRequestUpdate } from "@/interfaces/Product";
 import { FindByIdProduct, UpdateProduct } from "@/services/Product";
 
 interface DialogEditProductProps {
@@ -30,66 +27,53 @@ export default function DialogEditProduct({
   onUpdated,
 }: DialogEditProductProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [formData, setFormData] = useState<IProductRequest>({
+  const [loading, setLoading] = useState(false);
+
+  const [formData, setFormData] = useState<IProductRequestUpdate>({
     code: "",
     name: "",
     price: 0,
-    rawMaterials: [],
   });
 
   useEffect(() => {
-    if (!isDialogOpen || !id) return;
-
-    const fetchProduct = async () => {
-      try {
-        const res = await FindByIdProduct(id);
-
-        if (res) {
-          setFormData({
-            code: res.code || "",
-            name: res.name || "",
-            price: res.price || 0,
-            rawMaterials: Array.isArray(res.rawMaterials)
-              ? res.rawMaterials.map((rm: any) => ({
-                  rawMaterialId: rm.rawMaterialId || 0,
-                  quantityNeeded: rm.quantityNeeded || 0,
-                }))
-              : [],
-          });
+    if (isDialogOpen && id) {
+      const fetchProduct = async () => {
+        setLoading(true);
+        try {
+          const res = await FindByIdProduct(id);
+          if (res) {
+            setFormData({
+              code: res.code || "",
+              name: res.name || "",
+              price: res.price || 0,
+            });
+          }
+        } catch (error) {
+          toast.error("Erro ao carregar os dados do produto");
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        toast.error("Erro ao carregar os dados do produto");
-      }
-    };
+      };
 
-    fetchProduct();
+      fetchProduct();
+    }
   }, [id, isDialogOpen]);
 
-  const addRawMaterial = () => {
-    setFormData({
-      ...formData,
-      rawMaterials: [
-        ...formData.rawMaterials,
-        { rawMaterialId: 0, quantityNeeded: 1 },
-      ],
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    if (!formData.code) return toast.error("Preencha o código");
-    if (!formData.name) return toast.error("Preencha o nome");
+    if (!formData.code) return toast.error("Preencha o código do produto");
+    if (!formData.name) return toast.error("Preencha o nome do produto");
     if (formData.price <= 0)
       return toast.error("O preço deve ser maior que zero");
 
     try {
-      await UpdateProduct(id, formData);
+      await UpdateProduct(id, formData as IProductRequestUpdate);
+
       setIsDialogOpen(false);
       toast.success("Produto atualizado com sucesso");
       onUpdated();
     } catch (error) {
-      console.error(error);
       toast.error("Erro ao atualizar o produto");
     }
   };
@@ -105,16 +89,20 @@ export default function DialogEditProduct({
           Editar
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto font-montserrat">
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Editar Produto</DialogTitle>
           <DialogDescription>
-            Atualize as informações do produto e suas matérias-primas.
+            Altere as informações básicas do produto abaixo.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="code">Código *</Label>
               <Input
@@ -123,124 +111,54 @@ export default function DialogEditProduct({
                 onChange={(e) =>
                   setFormData({ ...formData, code: e.target.value })
                 }
+                placeholder="Ex: PROD-001"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name">Nome *</Label>
+              <Label htmlFor="name">Nome do Produto *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
+                placeholder="Ex: Cadeira Ergonômica"
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="price">Preço (R$) *</Label>
-            <Input
-              id="price"
-              type="number"
-              step="0.01"
-              value={formData.price}
-              onChange={(e) =>
-                setFormData({ ...formData, price: Number(e.target.value) })
-              }
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="price">Preço de Venda (R$) *</Label>
+              <Input
+                id="price"
+                type="number"
+                step="0.01"
+                value={formData.price}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: Number(e.target.value) })
+                }
+                placeholder="0.00"
+              />
+            </div>
 
-          <div className="border-t pt-4">
-            <div className="flex justify-between items-center mb-4">
-              <Label className="text-base font-semibold">
-                Composição de Matérias-Primas
-              </Label>
+            <div className="flex justify-end space-x-2 pt-4">
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
-                onClick={addRawMaterial}
+                onClick={() => setIsDialogOpen(false)}
+                className="cursor-pointer"
               >
-                <Plus className="w-4 h-4 mr-1" /> Adicionar Matéria
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+              >
+                Salvar Alterações
               </Button>
             </div>
-
-            {formData.rawMaterials.map(
-              (item: IProductRawMaterialRequest, index: number) => (
-                <div
-                  key={index}
-                  className="flex gap-4 mb-3 items-end bg-slate-50 p-3 rounded-lg"
-                >
-                  <div className="flex-1">
-                    <Label className="text-xs">ID da Matéria-Prima</Label>
-                    <Input
-                      type="number"
-                      value={item.rawMaterialId}
-                      onChange={(e) => {
-                        const newMaterials = [...formData.rawMaterials];
-                        newMaterials[index].rawMaterialId = Number(
-                          e.target.value,
-                        );
-                        setFormData({
-                          ...formData,
-                          rawMaterials: newMaterials,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="w-32">
-                    <Label className="text-xs">Quantidade</Label>
-                    <Input
-                      type="number"
-                      value={item.quantityNeeded}
-                      onChange={(e) => {
-                        const newMaterials = [...formData.rawMaterials];
-                        newMaterials[index].quantityNeeded = Number(
-                          e.target.value,
-                        );
-                        setFormData({
-                          ...formData,
-                          rawMaterials: newMaterials,
-                        });
-                      }}
-                    />
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-500 hover:bg-red-50"
-                    onClick={() => {
-                      const newMaterials = formData.rawMaterials.filter(
-                        (_, i) => i !== index,
-                      );
-                      setFormData({ ...formData, rawMaterials: newMaterials });
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              ),
-            )}
-          </div>
-
-          <div className="flex justify-end space-x-2 pt-4 border-t">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsDialogOpen(false)}
-              className="font-josefin text-gray-500 cursor-pointer"
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-            >
-              Salvar Alterações
-            </Button>
-          </div>
-        </form>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   );

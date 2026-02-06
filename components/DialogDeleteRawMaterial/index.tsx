@@ -48,14 +48,13 @@ export default function DialogDeleteRawMaterial({
           Excluir
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="font-montserrat">
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Excluir Matéria-Prima</AlertDialogTitle>
           <AlertDialogDescription className="font-josefin">
             Tem certeza de que deseja excluir a matéria-prima{" "}
-            <strong className="text-red-600 font-bold">{name}</strong>? Esta
-            ação não pode ser desfeita e pode afetar produtos que dependem deste
-            material.
+            <strong className="text-red-600">{name}</strong>? Esta ação não pode
+            ser desfeita e pode afetar produtos que dependem deste material.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -47,7 +47,6 @@ export default function DialogEditRawMaterial({
           });
         }
       } catch (error) {
-        console.error(error);
         toast.error("Erro ao carregar os dados da matéria-prima");
       }
     };
@@ -55,7 +54,7 @@ export default function DialogEditRawMaterial({
     fetchMaterial();
   }, [id, isDialogOpen]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (!formData.code) return toast.error("Preencha o código");
@@ -67,7 +66,10 @@ export default function DialogEditRawMaterial({
       toast.success("Matéria-prima atualizada com sucesso");
       onUpdated();
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error && error.message.includes("409")) {
+        toast.error("Já existe uma matéria-prima com este código");
+        return;
+      }
       toast.error("Erro ao atualizar a matéria-prima");
     }
   };
@@ -83,11 +85,11 @@ export default function DialogEditRawMaterial({
           Editar
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md font-montserrat">
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Editar Matéria-Prima</DialogTitle>
           <DialogDescription className="font-josefin">
-            Atualize o código, nome ou saldo em estoque do insumo.
+            Altere as informações básicas da matéria-prima abaixo.
           </DialogDescription>
         </DialogHeader>
 
@@ -129,12 +131,12 @@ export default function DialogEditRawMaterial({
             />
           </div>
 
-          <div className="flex justify-end space-x-2 pt-4 border-t">
+          <div className="flex justify-end space-x-2 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => setIsDialogOpen(false)}
-              className="font-josefin text-gray-500 cursor-pointer"
+              className="cursor-pointer"
             >
               Cancelar
             </Button>

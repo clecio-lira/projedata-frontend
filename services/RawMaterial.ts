@@ -1,6 +1,5 @@
 import { IRawMaterialRequest } from "@/interfaces/RawMaterial";
 import { apiRequest } from "@/utils/api";
-import { toast } from "sonner";
 
 export async function InsertRawMaterial(obj: IRawMaterialRequest) {
   try {
@@ -14,7 +13,7 @@ export async function InsertRawMaterial(obj: IRawMaterialRequest) {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao criar a matéria-prima.");
+    throw error;
   }
 }
 
@@ -26,7 +25,7 @@ export async function FindAllRawMaterials() {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao buscar as matérias-primas.");
+    throw error;
   }
 }
 
@@ -38,7 +37,7 @@ export async function FindByIdRawMaterial(id: number) {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao buscar a matéria-prima.");
+    throw error;
   }
 }
 
@@ -54,7 +53,7 @@ export async function UpdateRawMaterial(id: number, obj: IRawMaterialRequest) {
 
     return res;
   } catch (error) {
-    toast.error("Erro ao atualizar a matéria-prima.");
+    throw error;
   }
 }
 
@@ -64,6 +63,6 @@ export async function DeleteRawMaterial(id: number) {
       method: "DELETE",
     });
   } catch (error) {
-    toast.error("Erro ao remover matéria-prima.");
+    throw error;
   }
 }

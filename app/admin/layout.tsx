@@ -20,7 +20,7 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen font-montserrat bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -34,7 +34,7 @@ export default function AdminLayout({
         }`}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b">
-          <p className="font-montserrat">PROJEDATA</p>
+          <p>PROJEDATA</p>
 
           <button
             onClick={() => setSidebarOpen(false)}
@@ -52,7 +52,7 @@ export default function AdminLayout({
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center px-6 py-3 text-sm font-montserrat transition-colors ${
+                className={`flex items-center px-6 py-3 text-sm transition-colors ${
                   isActive
                     ? "bg-olive-50 text-olive-700 border-r-2 border-olive-600"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"

@@ -66,7 +66,7 @@ export default function ProductionReport() {
     <div className="space-y-6">
       <div className="flex flex-wrap justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold font-montserrat text-gray-900">
+          <h1 className="text-3xl font-bold text-gray-900">
             Relatório de Produção
           </h1>
           <p className="text-gray-600 font-josefin">
@@ -77,7 +77,7 @@ export default function ProductionReport() {
         <Button
           onClick={fetchProduction}
           variant="outline"
-          className="font-montserrat"
+          className="cursor-pointer"
         >
           <RefreshCw
             className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`}
@@ -141,7 +141,7 @@ export default function ProductionReport() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-montserrat text-xl flex items-center gap-2">
+          <CardTitle className="text-xl flex items-center gap-2">
             <CheckCircle2 className="text-green-600" /> Itens Produzidos
           </CardTitle>
           <CardDescription className="font-josefin">
@@ -149,7 +149,7 @@ export default function ProductionReport() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto font-montserrat">
+          <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>

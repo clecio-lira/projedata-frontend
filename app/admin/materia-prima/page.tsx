@@ -55,9 +55,7 @@ export default function RawMaterials() {
     <div className="space-y-6">
       <div className="flex flex-wrap justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold font-montserrat text-gray-900">
-            Matéria-Prima
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">Matéria-Prima</h1>
           <p className="text-gray-600 font-josefin">
             Gerencie o catálogo de matérias-primas
           </p>
@@ -85,15 +83,13 @@ export default function RawMaterials() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-montserrat text-xl">
-            Catálogo de Matérias-Primas
-          </CardTitle>
+          <CardTitle className="text-xl">Catálogo de Matérias-Primas</CardTitle>
           <CardDescription className="font-josefin">
             Lista de materiais cadastrados no sistema
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto font-montserrat">
+          <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>

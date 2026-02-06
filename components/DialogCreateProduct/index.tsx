@@ -182,7 +182,7 @@ export default function DialogCreateProduct({
             />
           </div>
 
-          <div className="space-y-4 border-t pt-4">
+          <div className="space-y-4 pt-4">
             <div className="flex justify-between items-center">
               <Label>Composição (Receita)</Label>
               <Button
@@ -190,7 +190,7 @@ export default function DialogCreateProduct({
                 variant="outline"
                 size="sm"
                 onClick={addRawMaterialRow}
-                className="bg-green-700 hover:bg-green-800"
+                className="cursor-pointer"
               >
                 + Adicionar Matéria-Prima
               </Button>
@@ -243,7 +243,9 @@ export default function DialogCreateProduct({
                   </div>
 
                   <div className="w-32">
-                    <Label>Qtd. Necessária</Label>
+                    <Label className="text-[10px] uppercase font-bold">
+                      Qtd. Necessária
+                    </Label>
                     <Input
                       type="number"
                       min="1"
@@ -284,12 +286,13 @@ export default function DialogCreateProduct({
               type="button"
               variant="outline"
               onClick={() => setIsDialogOpen(false)}
+              className="cursor-pointer"
             >
               Cancelar
             </Button>
             <Button
               type="submit"
-              className="bg-green-700 hover:bg-green-800 text-white"
+              className="bg-green-700 hover:bg-green-800 text-white cursor-pointer"
             >
               Criar Produto
             </Button>

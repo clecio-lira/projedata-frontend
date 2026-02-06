@@ -5,6 +5,12 @@ export interface IProductRequest {
   rawMaterials: IProductRawMaterialRequest[];
 }
 
+export interface IProductRequestUpdate {
+  code: string;
+  name: string;
+  price: number;
+}
+
 export interface IProductRawMaterialRequest {
   rawMaterialId: number;
   quantityNeeded: number;

@@ -49,13 +49,13 @@ export default function DialogDeleteProduct({
           Excluir
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="font-montserrat">
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Excluir Produto</AlertDialogTitle>
           <AlertDialogDescription>
             Tem certeza de que deseja excluir o produto{" "}
-            <strong className="text-foreground font-bold">{name}</strong>? Esta
-            ação não pode ser desfeita.
+            <strong className="text-red-600">{name}</strong>? Esta ação não pode
+            ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

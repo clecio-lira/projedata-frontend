@@ -55,6 +55,10 @@ export default function DialogCreateRawMaterial({
       toast.success("Matéria-prima criada com sucesso!");
       onCreated();
     } catch (error) {
+      if (error instanceof Error && error.message.includes("409")) {
+        toast.error("Já existe uma matéria-prima com este código");
+        return;
+      }
       toast.error("Erro ao criar matéria-prima");
     }
   };
@@ -72,9 +76,7 @@ export default function DialogCreateRawMaterial({
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-montserrat">
-            Criar Nova Matéria-Prima
-          </DialogTitle>
+          <DialogTitle>Criar Nova Matéria-Prima</DialogTitle>
           <DialogDescription className="font-josefin">
             Cadastre as matérias-primas que serão utilizadas na sua produção.
           </DialogDescription>
@@ -126,12 +128,13 @@ export default function DialogCreateRawMaterial({
               type="button"
               variant="outline"
               onClick={() => setIsDialogOpen(false)}
+              className="cursor-pointer"
             >
               Cancelar
             </Button>
             <Button
               type="submit"
-              className="bg-green-700 hover:bg-green-800 text-white"
+              className="bg-green-700 hover:bg-green-800 text-white cursor-pointer"
             >
               Criar Matéria-Prima
             </Button>

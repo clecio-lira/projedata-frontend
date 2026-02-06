@@ -1,4 +1,4 @@
-import { IProductRequest } from "@/interfaces/Product";
+import { IProductRequest, IProductRequestUpdate } from "@/interfaces/Product";
 import { apiRequest } from "@/utils/api";
 import { toast } from "sonner";
 
@@ -42,7 +42,7 @@ export async function FindByIdProduct(id: number) {
   }
 }
 
-export async function UpdateProduct(id: number, obj: IProductRequest) {
+export async function UpdateProduct(id: number, obj: IProductRequestUpdate) {
   try {
     const res = await apiRequest(`/products/${id}`, {
       method: "PUT",
