@@ -143,8 +143,13 @@ export default function ProductionReport() {
           <AlertTitle>Erro de sistema</AlertTitle>
           <AlertDescription className="flex items-center justify-between">
             Falha ao processar dados de produção.
-            <Button variant="link" onClick={fetchProduction}>
-              Tentar novamente
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchProduction}
+              className="ml-4 bg-white border-red-200 cursor-pointer"
+            >
+              <RefreshCw className="mr-2 h-4 w-4" /> Tentar Novamente
             </Button>
           </AlertDescription>
         </Alert>

@@ -73,7 +73,7 @@ export default function Products() {
               variant="outline"
               size="sm"
               onClick={fetchProducts}
-              className="ml-4 bg-white hover:bg-red-100 border-red-200"
+              className="ml-4 bg-white hover:bg-red-100 border-red-200 cursor-pointer"
             >
               <RefreshCw className="mr-2 h-4 w-4" /> Tentar Novamente
             </Button>
@@ -129,7 +129,7 @@ export default function Products() {
                       Erro ao carregar dados.
                     </TableCell>
                   </TableRow>
-                ) : !products ? (
+                ) : products.length === 0 || !products ? (
                   <TableRow>
                     <TableCell
                       colSpan={4}

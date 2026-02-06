@@ -73,7 +73,7 @@ export default function RawMaterials() {
               variant="outline"
               size="sm"
               onClick={fetchMaterials}
-              className="ml-4 bg-white border-red-200"
+              className="ml-4 bg-white border-red-200 cursor-pointer"
             >
               <RefreshCw className="mr-2 h-4 w-4" /> Tentar Novamente
             </Button>
@@ -129,7 +129,7 @@ export default function RawMaterials() {
                       Erro ao carregar dados.
                     </TableCell>
                   </TableRow>
-                ) : !materials ? (
+                ) : materials.length === 0 || !materials ? (
                   <TableRow>
                     <TableCell
                       colSpan={5}
