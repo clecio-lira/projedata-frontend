@@ -186,7 +186,7 @@ export default function DialogCreateProduct({
             />
           </div>
 
-          <div className="space-y-4 pt-4">
+          <div className="space-y-4 pt-4 -mx-4">
             <div className="flex justify-between items-center">
               <Label>Composição (Receita)</Label>
               <Button
