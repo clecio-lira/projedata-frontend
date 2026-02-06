@@ -14,7 +14,11 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { IProductRequest } from "@/interfaces/Product";
+import {
+  IProductRawMaterialRequest,
+  IProductRequest,
+} from "@/interfaces/Product";
+import { FindByIdProduct, UpdateProduct } from "@/services/Product";
 
 interface DialogEditProductProps {
   id: number;
@@ -33,38 +37,28 @@ export default function DialogEditProduct({
     rawMaterials: [],
   });
 
-  const resetForm = () => {
-    setFormData({
-      code: "",
-      name: "",
-      price: 0,
-      rawMaterials: [],
-    });
-  };
-
   useEffect(() => {
-    if (!isDialogOpen) return;
+    if (!isDialogOpen || !id) return;
 
     const fetchProduct = async () => {
       try {
-        // Simulando a chamada: const res: ProductDTOs.ProductDetailResponseDTO = await FindOneProduct(id);
-        // O res traria os dados detalhados do produto
-        console.log("Buscando produto ID:", id);
+        const res = await FindByIdProduct(id);
 
-        // Exemplo de como mapear a resposta para o formulário
-        /*
-        setFormData({
-          code: res.code,
-          name: res.name,
-          price: res.price,
-          rawMaterials: res.rawMaterials.map(rm => ({
-            rawMaterialId: rm.rawMaterialId,
-            quantityNeeded: rm.quantityNeeded
-          }))
-        });
-        */
+        if (res) {
+          setFormData({
+            code: res.code || "",
+            name: res.name || "",
+            price: res.price || 0,
+            rawMaterials: Array.isArray(res.rawMaterials)
+              ? res.rawMaterials.map((rm: any) => ({
+                  rawMaterialId: rm.rawMaterialId || 0,
+                  quantityNeeded: rm.quantityNeeded || 0,
+                }))
+              : [],
+          });
+        }
       } catch (error) {
-        toast.error("Erro ao buscar o produto");
+        toast.error("Erro ao carregar os dados do produto");
       }
     };
 
@@ -90,7 +84,7 @@ export default function DialogEditProduct({
       return toast.error("O preço deve ser maior que zero");
 
     try {
-      // await UpdateProduct(id, formData);
+      await UpdateProduct(id, formData);
       setIsDialogOpen(false);
       toast.success("Produto atualizado com sucesso");
       onUpdated();
@@ -172,54 +166,62 @@ export default function DialogEditProduct({
               </Button>
             </div>
 
-            {formData.rawMaterials.map((item: any, index: any) => (
-              <div
-                key={index}
-                className="flex gap-4 mb-3 items-end bg-slate-50 p-3 rounded-lg"
-              >
-                <div className="flex-1">
-                  <Label className="text-xs">ID da Matéria-Prima</Label>
-                  <Input
-                    type="number"
-                    value={item.rawMaterialId}
-                    onChange={(e) => {
-                      const newMaterials = [...formData.rawMaterials];
-                      newMaterials[index].rawMaterialId = Number(
-                        e.target.value,
-                      );
-                      setFormData({ ...formData, rawMaterials: newMaterials });
-                    }}
-                  />
-                </div>
-                <div className="w-32">
-                  <Label className="text-xs">Quantidade</Label>
-                  <Input
-                    type="number"
-                    value={item.quantityNeeded}
-                    onChange={(e) => {
-                      const newMaterials = [...formData.rawMaterials];
-                      newMaterials[index].quantityNeeded = Number(
-                        e.target.value,
-                      );
-                      setFormData({ ...formData, rawMaterials: newMaterials });
-                    }}
-                  />
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-red-500 hover:bg-red-50"
-                  onClick={() => {
-                    const newMaterials = formData.rawMaterials.filter(
-                      (_, i) => i !== index,
-                    );
-                    setFormData({ ...formData, rawMaterials: newMaterials });
-                  }}
+            {formData.rawMaterials.map(
+              (item: IProductRawMaterialRequest, index: number) => (
+                <div
+                  key={index}
+                  className="flex gap-4 mb-3 items-end bg-slate-50 p-3 rounded-lg"
                 >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            ))}
+                  <div className="flex-1">
+                    <Label className="text-xs">ID da Matéria-Prima</Label>
+                    <Input
+                      type="number"
+                      value={item.rawMaterialId}
+                      onChange={(e) => {
+                        const newMaterials = [...formData.rawMaterials];
+                        newMaterials[index].rawMaterialId = Number(
+                          e.target.value,
+                        );
+                        setFormData({
+                          ...formData,
+                          rawMaterials: newMaterials,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="w-32">
+                    <Label className="text-xs">Quantidade</Label>
+                    <Input
+                      type="number"
+                      value={item.quantityNeeded}
+                      onChange={(e) => {
+                        const newMaterials = [...formData.rawMaterials];
+                        newMaterials[index].quantityNeeded = Number(
+                          e.target.value,
+                        );
+                        setFormData({
+                          ...formData,
+                          rawMaterials: newMaterials,
+                        });
+                      }}
+                    />
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-red-500 hover:bg-red-50"
+                    onClick={() => {
+                      const newMaterials = formData.rawMaterials.filter(
+                        (_, i) => i !== index,
+                      );
+                      setFormData({ ...formData, rawMaterials: newMaterials });
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ),
+            )}
           </div>
 
           <div className="flex justify-end space-x-2 pt-4 border-t">
@@ -227,12 +229,13 @@ export default function DialogEditProduct({
               type="button"
               variant="outline"
               onClick={() => setIsDialogOpen(false)}
+              className="font-josefin text-gray-500 cursor-pointer"
             >
               Cancelar
             </Button>
             <Button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
             >
               Salvar Alterações
             </Button>

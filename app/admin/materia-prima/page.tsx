@@ -22,47 +22,47 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 
-import DialogCreateProduct from "@/components/DialogCreateProduct";
-import DialogDeleteProduct from "@/components/DialogDeleteProduct";
-import DialogEditProduct from "@/components/DialogEditProduct";
-import { IProductResponse } from "@/interfaces/Product";
-import { FindAllProducts } from "@/services/Product";
+import DialogCreateRawMaterial from "@/components/DialogCreateRawMaterial";
+import DialogDeleteRawMaterial from "@/components/DialogDeleteRawMaterial";
+import DialogEditRawMaterial from "@/components/DialogEditRawMaterial";
+import { IRawMaterialResponse } from "@/interfaces/RawMaterial";
+import { FindAllRawMaterials } from "@/services/RawMaterial";
 
-export default function Products() {
-  const [products, setProducts] = useState<IProductResponse[]>([]);
+export default function RawMaterials() {
+  const [materials, setMaterials] = useState<IRawMaterialResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const fetchProducts = useCallback(async () => {
+  const fetchMaterials = useCallback(async () => {
     setLoading(true);
     setError(false);
     try {
-      const res = await FindAllProducts();
-      setProducts(res);
+      const res = await FindAllRawMaterials();
+      setMaterials(res);
     } catch (err) {
       setError(true);
-      toast.error("Não foi possível carregar os produtos.");
+      toast.error("Não foi possível carregar as matérias primas.");
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    fetchMaterials();
+  }, [fetchMaterials]);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold font-montserrat text-gray-900">
-            Produtos
+            Matéria Prima
           </h1>
           <p className="text-gray-600 font-josefin">
-            Gerencie o catálogo de produtos
+            Gerencie o catálogo de matérias primas
           </p>
         </div>
-        <DialogCreateProduct onCreated={fetchProducts} />
+        <DialogCreateRawMaterial onCreated={fetchMaterials} />
       </div>
 
       {error && (
@@ -74,8 +74,8 @@ export default function Products() {
             <Button
               variant="outline"
               size="sm"
-              onClick={fetchProducts}
-              className="ml-4 bg-white hover:bg-red-100 border-red-200"
+              onClick={fetchMaterials}
+              className="ml-4 bg-white border-red-200"
             >
               <RefreshCw className="mr-2 h-4 w-4" /> Tentar Novamente
             </Button>
@@ -86,10 +86,10 @@ export default function Products() {
       <Card>
         <CardHeader>
           <CardTitle className="font-montserrat text-xl">
-            Catálogo de Produtos
+            Catálogo de Matérias Primas
           </CardTitle>
           <CardDescription className="font-josefin">
-            Lista de produtos cadastrados no sistema
+            Lista de materiais cadastrados no sistema
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -97,15 +97,15 @@ export default function Products() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-150px">Código</TableHead>
-                  <TableHead>Nome do Produto</TableHead>
-                  <TableHead>Preço Unitário</TableHead>
+                  <TableHead className="w-120px">Código</TableHead>
+                  <TableHead>Nome da Matéria Prima</TableHead>
+                  <TableHead>Quantidade em Estoque</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {loading ? (
-                  [...Array(5)].map((_, i) => (
+                  [...Array(4)].map((_, i) => (
                     <TableRow key={i}>
                       <TableCell>
                         <Skeleton className="h-4 w-24" />
@@ -133,38 +133,43 @@ export default function Products() {
                       Erro ao carregar dados.
                     </TableCell>
                   </TableRow>
-                ) : !products ? (
+                ) : !materials ? (
                   <TableRow>
                     <TableCell
-                      colSpan={4}
+                      colSpan={5}
                       className="h-32 text-center text-gray-500"
                     >
-                      Nenhum produto encontrado.
+                      Nenhuma matéria prima encontrada.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  products.map((product) => (
-                    <TableRow key={product.id}>
+                  materials.map((item) => (
+                    <TableRow key={item.id}>
                       <TableCell className="font-medium text-blue-600">
-                        {product.code}
+                        {item.code}
                       </TableCell>
-                      <TableCell>{product.name}</TableCell>
+                      <TableCell>{item.name}</TableCell>
                       <TableCell>
-                        {new Intl.NumberFormat("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        }).format(product.price)}
+                        <span
+                          className={
+                            item.stockQuantity <= 5
+                              ? "text-red-600 font-bold"
+                              : ""
+                          }
+                        >
+                          {item.stockQuantity} unidades
+                        </span>
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <DialogEditProduct
-                            id={product.id}
-                            onUpdated={fetchProducts}
+                          <DialogEditRawMaterial
+                            id={item.id}
+                            onUpdated={fetchMaterials}
                           />
-                          <DialogDeleteProduct
-                            id={product.id}
-                            name={product.name}
-                            setProducts={setProducts}
+                          <DialogDeleteRawMaterial
+                            id={item.id}
+                            name={item.name}
+                            onDeleted={fetchMaterials}
                           />
                         </div>
                       </TableCell>

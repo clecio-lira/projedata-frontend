@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { LogOut, Menu, X, ComputerIcon, BrushCleaningIcon } from "lucide-react";
+import { LightbulbIcon, Menu, X, PackageIcon, BoxesIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminLayout({
@@ -15,13 +14,13 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   const navigation = [
-    { name: "Computadores", href: "/admin/computers", icon: ComputerIcon },
-    { name: "Limpezas", href: "/admin/cleaning", icon: BrushCleaningIcon },
+    { name: "Produção", href: "/admin/producao", icon: LightbulbIcon },
+    { name: "Produtos", href: "/admin/produtos", icon: PackageIcon },
+    { name: "Materia Prima", href: "/admin/materia-prima", icon: BoxesIcon },
   ];
 
   return (
     <div className="min-h-screen font-montserrat bg-gray-50">
-      {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -29,16 +28,14 @@ export default function AdminLayout({
         />
       )}
 
-      {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b">
-          <Link href="/">
-            <p className="font-montserrat">Gerenciamento LW</p>
-          </Link>
+          <p className="font-montserrat">PROJEDATA</p>
+
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden text-gray-500 hover:text-gray-700 cursor-pointer"
@@ -70,9 +67,7 @@ export default function AdminLayout({
         </nav>
       </div>
 
-      {/* Main content */}
       <div className="lg:pl-64">
-        {/* Top bar */}
         <div className="bg-white shadow-sm border-b h-16 flex items-center justify-between px-6">
           <button
             onClick={() => setSidebarOpen(true)}
@@ -82,7 +77,6 @@ export default function AdminLayout({
           </button>
         </div>
 
-        {/* Page content */}
         <main className="p-6">{children}</main>
       </div>
     </div>

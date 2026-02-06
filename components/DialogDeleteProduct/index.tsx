@@ -15,6 +15,7 @@ import {
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { IProductResponse } from "@/interfaces/Product";
+import { DeleteProduct } from "@/services/Product";
 
 interface DialogDeleteProductProps {
   id: number;
@@ -29,8 +30,7 @@ export default function DialogDeleteProduct({
 }: DialogDeleteProductProps) {
   const handleDelete = async (productId: number) => {
     try {
-      // Substitua pelo seu método real de API (ex: productService.remove)
-      // await RemoveProduct(productId);
+      await DeleteProduct(productId);
 
       setProducts((prev) => prev.filter((p) => p.id !== productId));
 
