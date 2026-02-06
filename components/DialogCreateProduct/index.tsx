@@ -97,7 +97,7 @@ export default function DialogCreateProduct({
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (!formData.code) return toast.error("Preencha o código do produto");
@@ -105,7 +105,9 @@ export default function DialogCreateProduct({
     if (formData.price <= 0)
       return toast.error("O preço deve ser maior que zero");
     if (formData.rawMaterials.some((rm) => rm.rawMaterialId === 0)) {
-      return toast.error("Selecione um insumo para cada linha adicionada");
+      return toast.error(
+        "Selecione uma matéria-prima para cada linha adicionada",
+      );
     }
 
     try {
@@ -128,12 +130,12 @@ export default function DialogCreateProduct({
           className="bg-green-700 hover:bg-green-800 text-white font-semibold px-6 py-3 shadow-lg cursor-pointer"
         >
           <Plus className="w-5 h-5 mr-2" />
-          Adicionar Produto
+          Criar Produto
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Adicionar Novo Produto</DialogTitle>
+          <DialogTitle>Crie Novo Produto</DialogTitle>
           <DialogDescription>
             Cadastre um produto e suas necessidades de matéria-prima.
           </DialogDescription>
@@ -188,9 +190,9 @@ export default function DialogCreateProduct({
                 variant="outline"
                 size="sm"
                 onClick={addRawMaterialRow}
-                className="text-olive-700 border-olive-200 hover:bg-olive-50"
+                className="bg-green-700 hover:bg-green-800"
               >
-                + Adicionar Matéria Prima
+                + Adicionar Matéria-Prima
               </Button>
             </div>
 
@@ -241,7 +243,7 @@ export default function DialogCreateProduct({
                   </div>
 
                   <div className="w-32">
-                    <Label className="text-[10px]">Qtd. Necessária</Label>
+                    <Label>Qtd. Necessária</Label>
                     <Input
                       type="number"
                       min="1"

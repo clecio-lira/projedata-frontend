@@ -118,7 +118,7 @@ export default function ProductionReport() {
           <AlertDescription>
             {data.notProduced.map((item, idx) => (
               <p key={idx}>
-                • <strong>{item.productName}</strong>: materia prima
+                • <strong>{item.productName}</strong>: matéria-prima
                 insuficiente: {item.reason.split(":")[1].trim()}
               </p>
             ))}

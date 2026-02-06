@@ -41,7 +41,7 @@ export default function RawMaterials() {
       setMaterials(res);
     } catch (err) {
       setError(true);
-      toast.error("Não foi possível carregar as matérias primas.");
+      toast.error("Não foi possível carregar as matérias-primas.");
     } finally {
       setLoading(false);
     }
@@ -56,10 +56,10 @@ export default function RawMaterials() {
       <div className="flex flex-wrap justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold font-montserrat text-gray-900">
-            Matéria Prima
+            Matéria-Prima
           </h1>
           <p className="text-gray-600 font-josefin">
-            Gerencie o catálogo de matérias primas
+            Gerencie o catálogo de matérias-primas
           </p>
         </div>
         <DialogCreateRawMaterial onCreated={fetchMaterials} />
@@ -86,7 +86,7 @@ export default function RawMaterials() {
       <Card>
         <CardHeader>
           <CardTitle className="font-montserrat text-xl">
-            Catálogo de Matérias Primas
+            Catálogo de Matérias-Primas
           </CardTitle>
           <CardDescription className="font-josefin">
             Lista de materiais cadastrados no sistema
@@ -98,7 +98,7 @@ export default function RawMaterials() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-120px">Código</TableHead>
-                  <TableHead>Nome da Matéria Prima</TableHead>
+                  <TableHead>Nome</TableHead>
                   <TableHead>Quantidade em Estoque</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
@@ -139,7 +139,7 @@ export default function RawMaterials() {
                       colSpan={5}
                       className="h-32 text-center text-gray-500"
                     >
-                      Nenhuma matéria prima encontrada.
+                      Nenhuma matéria-prima encontrada.
                     </TableCell>
                   </TableRow>
                 ) : (

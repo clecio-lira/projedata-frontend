@@ -38,25 +38,24 @@ export default function DialogCreateRawMaterial({
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (!formData.code)
       return toast.error("Preencha o código da matéria-prima");
     if (!formData.name) return toast.error("Preencha o nome da matéria-prima");
     if (formData.stockQuantity < 0)
-      return toast.error("A quantidade em estoque não pode ser negativa");
+      return toast.error("A quantidade em estoque não pode ser menor que zero");
 
     try {
       await InsertRawMaterial(formData);
 
       resetForm();
       setIsDialogOpen(false);
-      toast.success("Matéria-prima cadastrada com sucesso!");
+      toast.success("Matéria-prima criada com sucesso!");
       onCreated();
     } catch (error) {
-      console.error(error);
-      toast.error("Erro ao cadastrar matéria-prima");
+      toast.error("Erro ao criar matéria-prima");
     }
   };
 
@@ -68,22 +67,22 @@ export default function DialogCreateRawMaterial({
           className="bg-green-700 hover:bg-green-800 text-white font-semibold px-6 py-3 shadow-lg cursor-pointer"
         >
           <Plus className="w-5 h-5 mr-2" />
-          Adicionar Matéria-Prima
+          Criar Matéria-Prima
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="font-montserrat">
-            Nova Matéria-Prima
+            Criar Nova Matéria-Prima
           </DialogTitle>
           <DialogDescription className="font-josefin">
-            Cadastre os insumos básicos que serão utilizados na sua produção.
+            Cadastre as matérias-primas que serão utilizadas na sua produção.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 font-montserrat">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="code">Código do Insumo *</Label>
+            <Label htmlFor="code">Código *</Label>
             <Input
               id="code"
               value={formData.code}
@@ -127,15 +126,14 @@ export default function DialogCreateRawMaterial({
               type="button"
               variant="outline"
               onClick={() => setIsDialogOpen(false)}
-              className="font-josefin"
             >
               Cancelar
             </Button>
             <Button
               type="submit"
-              className="bg-green-700 hover:bg-green-800 text-white font-semibold"
+              className="bg-green-700 hover:bg-green-800 text-white"
             >
-              Adicionar Matéria-Prima
+              Criar Matéria-Prima
             </Button>
           </div>
         </form>
