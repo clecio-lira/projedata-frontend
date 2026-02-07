@@ -117,9 +117,9 @@ export default function DialogEditRawMaterial({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="stockQuantity">Quantidade em Estoque</Label>
+            <Label htmlFor="stock">Quantidade em Estoque</Label>
             <Input
-              id="stockQuantity"
+              id="stock"
               type="number"
               value={formData.stockQuantity}
               onChange={(e) =>
